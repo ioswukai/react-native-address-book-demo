@@ -21,11 +21,10 @@ import About from './about';
 // 引入自定义UI
 import WKTabNavigator from '../wkCommonCustomComponent/wkTabNavigator';
 
-// 设置数据源
+// 设置主页面数据源
 let componentArr = [Home,Message,Manager,About];
-let componentTitleArr = ['首页','公告','管理','关于'];
 
 // 导出MainTabNavigator
-const MainTabNavigator = WKTabNavigator.getTabNavigator(componentArr,componentTitleArr);
+const MainTabNavigator = WKTabNavigator.getTabNavigator(componentArr);
 export default  MainTabNavigator;
 
