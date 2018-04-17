@@ -225,16 +225,75 @@ export default class WKTabNavigator {
     getComponentStack=(component,componentTitleDic)=>{
         let screenTitle = componentTitleDic.stackTopComponentKey;
         let stackTitle = componentTitleDic.stackTitle;
-        let stackObj = {};
 
-        // 设置stackObj
-        stackObj[screenTitle] = {
-            screen: component,
+        /*
+         像下面一样 注册路由组件集合
+         StackNavigator(RouteConfigs, StackNavigatorConfig)
 
-        };
+         StackNavigator({
+                Home: { screen: HomeScreen },
+                Chat: { screen: ChatScreen },
+            });
+        */
+        const stackRouteConfig = this.getRouteConfig(screenTitle,component);
+
 
         // 设置配置选项
-        let options = {
+        const stackNavigatorConfig = {
+            navigationOptions:{
+                // 设置导航栏标题，推荐
+                headerTitle:stackTitle,
+
+                /*
+                 设置跳转页面左侧返回箭头后面的文字，默认是上一个页面的标题。
+                 可以自定义，也可以设置为null
+                 */
+                headerBackTitle:null,
+
+                /*
+                 设置当上个页面标题不符合返回箭头后的文字时，默认改成"返回"
+                 */
+                headerTruncatedBackTitle:'返回',
+
+                /*
+                 设置导航栏文字样式
+                 */
+                headerTitleStyle:{
+                    /*
+                     此做法 在新本已无效
+                    测试中发现，在iphone上标题栏的标题为居中状态，而在Android上则是居左对齐。
+                     * 所以需要在navigationOptions中设置headerTitleStyle
+                     * 的alignSelf为 ' center '即可解决。
+                     * */
+                    // alignSelf:'center',
+
+                    /*
+                        在新本 设置安卓标题居中的新做法
+                    */
+                    flex: 1,
+                    textAlign: 'center',
+                },
+                /*
+                 设置导航条的样式。背景色，宽高等
+                 */
+                headerStyle:{
+
+                },
+                /*
+                 设置导航栏前景色
+                 */
+                headerTintColor:'#333333',
+
+                /*
+                 是否支持滑动返回手势，iOS默认支持，安卓默认关闭
+                 */
+                gesturesEnabled:true,
+
+                showIcon:true,
+                swipeEnabled:false,
+                animationEnabled:false,
+            },
+
             /* 定义跳转风格
                 card：使用iOS和安卓默认的风格
                 modal：iOS独有的使屏幕从底部画出。类似iOS的present效果
@@ -245,50 +304,45 @@ export default class WKTabNavigator {
             */
             mode:'card',
         };
-        options.navigationOptions = {
-            // 设置导航栏标题，推荐
-            headerTitle:stackTitle,
 
-            /*
-             设置跳转页面左侧返回箭头后面的文字，默认是上一个页面的标题。
-             可以自定义，也可以设置为null
-             */
-            headerBackTitle:null,
-
-            /*
-             设置当上个页面标题不符合返回箭头后的文字时，默认改成"返回"
-             */
-            headerTruncatedBackTitle:'返回',
-
-            /*
-             设置导航栏文字样式
-             */
-            headerTitleStyle:{
-                /*测试中发现，在iphone上标题栏的标题为居中状态，而在Android上则是居左对齐。
-                 * 所以需要在navigationOptions中设置headerTitleStyle
-                 * 的alignSelf为 ' center '即可解决。
-                 * */
-                alignSelf:'center',
-            },
-
-            /*
-             设置导航栏前景色
-             */
-            headerTintColor:'#333333',
-
-            /*
-             是否支持滑动返回手势，iOS默认支持，安卓默认关闭
-             */
-            gesturesEnabled:true,
-
-            showIcon:true,
-            swipeEnabled:false,
-            animationEnabled:false,
-        };
-
-        // console.log(stackObj);
-        return(StackNavigator(stackObj,options));
+        // console.log(stackRouteConfig);
+        return(StackNavigator(stackRouteConfig,stackNavigatorConfig));
     }
+
+    // 根据顶部route的key 生成对应的routeConfig对象
+    getRouteConfig=(stackTopComponentKey:string,component)=>{
+        let stackRouteConfig = {};
+
+        if (stackTopComponentKey === 'Home'){
+            stackRouteConfig = {
+                // 首页
+                stackTopComponentKey:{screen: component},
+            };
+
+        }else if (stackTopComponentKey === 'Message'){
+            stackRouteConfig = {
+                // 公告
+                stackTopComponentKey:{screen: component},
+            };
+
+        }else if (stackTopComponentKey === 'Manager'){
+            stackRouteConfig = {
+                // 管理
+                stackTopComponentKey:{screen: component},
+            };
+
+        }else if (stackTopComponentKey === 'About'){
+            stackRouteConfig = {
+                // 关于
+                stackTopComponentKey:{screen: component},
+            };
+
+        }
+        return stackRouteConfig;
+    }
+
+
+
 
 }
 
